@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Redirecting...</title>
+    <script>
+      fetch("https://raw.githubusercontent.com/YOUR_USERNAME/qr-redirect/main/data.json")
+        .then(response => response.json())
+        .then(data => {
+          window.location.href = data.url;
+        })
+        .catch(err => {
+          document.body.innerHTML = "<h2>Failed to redirect.</h2>";
+        });
+    </script>
+  </head>
+  <body>
+    <p>Redirecting...</p>
+  </body>
+</html>
