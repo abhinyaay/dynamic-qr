@@ -5,91 +5,90 @@
   <title>Redirecting...</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
       padding: 0;
-      height: 100vh;
-      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      background-color: #0d1117;
+      color: #f0f6fc;
+      font-family: 'Fira Code', monospace;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
-      color: white;
-      font-family: 'Segoe UI', sans-serif;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
       text-align: center;
-      animation: fadeIn 1s ease-in-out;
-    }
-
-    .spinner {
-      width: 60px;
-      height: 60px;
-      border: 6px solid rgba(255, 255, 255, 0.3);
-      border-top: 6px solid white;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin-bottom: 20px;
     }
 
     h1 {
       font-size: 1.8rem;
-      animation: pulse 2s infinite;
-      margin: 0 20px;
+      margin: 20px;
+      color: #58a6ff;
+      text-shadow: 0 0 10px #58a6ff;
+      animation: glowText 1.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes glowText {
+      from {
+        text-shadow: 0 0 5px #58a6ff, 0 0 10px #58a6ff;
+      }
+      to {
+        text-shadow: 0 0 20px #58a6ff, 0 0 30px #58a6ff;
+      }
+    }
+
+    .loader-bar {
+      width: 80%;
+      height: 8px;
+      background: #21262d;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    .bar {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #00ffea, #0070f3);
+      animation: load 2s forwards;
+    }
+
+    @keyframes load {
+      0% { width: 0%; }
+      100% { width: 100%; }
     }
 
     .fallback {
-      margin-top: 25px;
-      font-size: 1rem;
-      opacity: 0.85;
-      line-height: 1.5;
+      margin-top: 30px;
+      font-size: 0.95rem;
+      color: #8b949e;
     }
 
     .fallback a {
-      color: #ffffff;
+      color: #58a6ff;
       text-decoration: underline;
       word-break: break-word;
     }
 
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.6; }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
     @media (max-width: 480px) {
-      .spinner {
-        width: 40px;
-        height: 40px;
-        border-width: 4px;
-      }
-
       h1 {
-        font-size: 1.3rem;
+        font-size: 1.4rem;
       }
 
       .fallback {
-        font-size: 0.95rem;
+        font-size: 0.85rem;
         padding: 0 10px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="spinner"></div>
-  <h1>Redirecting you...</h1>
+  <h1>Redirecting you to the codeverse...</h1>
+  <div class="loader-bar"><div class="bar"></div></div>
   <div class="fallback" id="fallback" style="display:none;">
-    If you're not redirected, <br><a id="manualLink" href="#">click here</a>.
+    Not redirected? <a id="manualLink" href="#">Click here</a>.
   </div>
 
   <script>
@@ -103,10 +102,10 @@
         fallback.style.display = "block";
         setTimeout(() => {
           location.replace(data.url);
-        }, 2000); // 2-second delay
+        }, 2200); // Let loading bar finish
       })
       .catch(() => {
-        document.querySelector("h1").textContent = "Failed to redirect.";
+        document.querySelector("h1").textContent = "⚠️ Redirect failed.";
         fallback.innerHTML = "Please try again later.";
         fallback.style.display = "block";
       });
