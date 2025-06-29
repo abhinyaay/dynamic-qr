@@ -96,7 +96,7 @@
     const fallback = document.getElementById("fallback");
     const manualLink = document.getElementById("manualLink");
 
-    fetch("https://api.allorigins.win/raw?url=https://raw.githubusercontent.com/abhinyaay/qr-redirect/main/data.json")
+    fetch("https://api.allorigins.win/raw?url=https://raw.githubusercontent.com/abhinyaay/dynamic-qr/main/data.json")
       .then(res => res.json())
       .then(data => {
         manualLink.href = data.url;
