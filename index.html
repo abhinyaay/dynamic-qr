@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8">
     <title>Redirecting...</title>
     <script>
-      fetch("https://github.com/abhinyaay/dynamic-qr/blob/main/data.json")
-        .then(response => response.json())
+      fetch("https://api.allorigins.win/raw?url=https://raw.githubusercontent.com/abhinyaay/qr-redirect/main/data.json")
+        .then(res => res.json())
         .then(data => {
-          window.location.href = data.url;
+          location.replace(data.url);
         })
         .catch(err => {
-          document.body.innerHTML = "<h2>Failed to redirect.</h2>";
+          document.body.innerHTML = "<h2>Failed to redirect. Check the JSON or try again later.</h2>";
         });
     </script>
   </head>
