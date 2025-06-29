@@ -23,20 +23,17 @@
     }
 
     h1 {
-      font-size: 1.8rem;
+      font-size: 1.6rem;
       margin: 20px;
-      color: #58a6ff;
-      text-shadow: 0 0 10px #58a6ff;
+      color: #facc15;
+      text-shadow: 0 0 5px #facc15, 0 0 15px #fbbf24;
       animation: glowText 1.5s ease-in-out infinite alternate;
+      transition: all 0.3s ease;
     }
 
     @keyframes glowText {
-      from {
-        text-shadow: 0 0 5px #58a6ff, 0 0 10px #58a6ff;
-      }
-      to {
-        text-shadow: 0 0 20px #58a6ff, 0 0 30px #58a6ff;
-      }
+      from { text-shadow: 0 0 5px #facc15, 0 0 10px #fbbf24; }
+      to   { text-shadow: 0 0 20px #fde047, 0 0 30px #facc15; }
     }
 
     .loader-bar {
@@ -51,8 +48,8 @@
     .bar {
       width: 0%;
       height: 100%;
-      background: linear-gradient(90deg, #00ffea, #0070f3);
-      animation: load 2s forwards;
+      background: linear-gradient(90deg, #facc15, #f59e0b);
+      animation: load 3s forwards;
     }
 
     @keyframes load {
@@ -67,34 +64,79 @@
     }
 
     .fallback a {
-      color: #58a6ff;
+      color: #facc15;
       text-decoration: underline;
       word-break: break-word;
     }
 
-    @media (max-width: 480px) {
-      h1 {
-        font-size: 1.4rem;
-      }
+    #musicToggle {
+      margin-top: 20px;
+      background: #161b22;
+      color: #facc15;
+      border: 1px solid #30363d;
+      padding: 6px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      display: none;
+      transition: background 0.3s;
+    }
 
-      .fallback {
-        font-size: 0.85rem;
-        padding: 0 10px;
-      }
+    #musicToggle:hover {
+      background: #1f242d;
+    }
+
+    audio { display: none; }
+
+    @media (max-width: 480px) {
+      h1 { font-size: 1.3rem; }
+      .fallback { font-size: 0.85rem; padding: 0 10px; }
     }
   </style>
 </head>
 <body>
-  <h1>Redirecting you to the codeverse...</h1>
+  <h1 id="loadingText">Just a moment, setting the mood...</h1>
   <div class="loader-bar"><div class="bar"></div></div>
   <div class="fallback" id="fallback" style="display:none;">
     Not redirected? <a id="manualLink" href="#">Click here</a>.
   </div>
 
+  <button id="musicToggle">🔇 Music Off</button>
+  <audio id="bgmusic" loop muted>
+    <source src="https://cdn.jsdelivr.net/gh/joshmadakor1/random-assets/lofi.mp3" type="audio/mpeg">
+  </audio>
+
   <script>
     const fallback = document.getElementById("fallback");
     const manualLink = document.getElementById("manualLink");
+    const loadingText = document.getElementById("loadingText");
+    const music = document.getElementById("bgmusic");
+    const toggleBtn = document.getElementById("musicToggle");
 
+    const messages = [
+      "Where you goin’? Hold tight...",
+      "Pixels aligning just for you...",
+      "Your portal’s warming up...",
+      "Redirect magic loading...",
+      "Don’t blink. It’s happening...",
+      "Engaging warp drive...",
+      "Teleportation in progress...",
+      "Charging the portal...",
+      "Sit back and relax...",
+      "Brewing digital coffee...",
+      "Your destination is vibing up...",
+      "Just a moment, setting the mood...",
+      "Syncing galaxies...",
+      "Phase-shifting in 3... 2... 1..."
+    ];
+
+    let index = 0;
+    setInterval(() => {
+      index = (index + 1) % messages.length;
+      loadingText.textContent = messages[index];
+    }, 2200);
+
+    // Fetch & redirect
     fetch("https://api.allorigins.win/raw?url=https://raw.githubusercontent.com/abhinyaay/dynamic-qr/main/data.json")
       .then(res => res.json())
       .then(data => {
@@ -102,13 +144,35 @@
         fallback.style.display = "block";
         setTimeout(() => {
           location.replace(data.url);
-        }, 2200); // Let loading bar finish
+        }, 4000);
       })
       .catch(() => {
-        document.querySelector("h1").textContent = "⚠️ Redirect failed.";
+        loadingText.textContent = "⚠️ Redirect failed.";
         fallback.innerHTML = "Please try again later.";
         fallback.style.display = "block";
       });
+
+    // Delay music play if user stays
+    setTimeout(() => {
+      music.muted = false;
+      music.play().then(() => {
+        toggleBtn.style.display = "inline-block";
+        toggleBtn.textContent = "🔊 Music On";
+      }).catch(() => {
+        console.warn("Autoplay blocked");
+      });
+    }, 4500);
+
+    // Toggle button
+    toggleBtn.addEventListener("click", () => {
+      if (music.paused) {
+        music.play();
+        toggleBtn.textContent = "🔊 Music On";
+      } else {
+        music.pause();
+        toggleBtn.textContent = "🔇 Music Off";
+      }
+    });
   </script>
 </body>
 </html>
