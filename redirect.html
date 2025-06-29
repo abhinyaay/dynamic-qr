@@ -3,7 +3,7 @@
   <head>
     <title>Redirecting...</title>
     <script>
-      fetch("https://raw.githubusercontent.com/abhinyaay/qr-redirect/main/data.json")
+      fetch("https://raw.githubusercontent.com/abhinyaay/dynamic-qr/main/data.json")
         .then(response => response.json())
         .then(data => {
           window.location.href = data.url;
