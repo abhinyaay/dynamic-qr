@@ -1,20 +1,115 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Redirecting...</title>
-    <script>
-      fetch("https://api.allorigins.win/raw?url=https://raw.githubusercontent.com/abhinyaay/dynamic-qr/main/data.json")
-        .then(res => res.json())
-        .then(data => {
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Redirecting...</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .spinner {
+      width: 60px;
+      height: 60px;
+      border: 6px solid rgba(255, 255, 255, 0.3);
+      border-top: 6px solid white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      animation: pulse 2s infinite;
+      margin: 0 20px;
+    }
+
+    .fallback {
+      margin-top: 25px;
+      font-size: 1rem;
+      opacity: 0.85;
+      line-height: 1.5;
+    }
+
+    .fallback a {
+      color: #ffffff;
+      text-decoration: underline;
+      word-break: break-word;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 480px) {
+      .spinner {
+        width: 40px;
+        height: 40px;
+        border-width: 4px;
+      }
+
+      h1 {
+        font-size: 1.3rem;
+      }
+
+      .fallback {
+        font-size: 0.95rem;
+        padding: 0 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="spinner"></div>
+  <h1>Redirecting you...</h1>
+  <div class="fallback" id="fallback" style="display:none;">
+    If you're not redirected, <br><a id="manualLink" href="#">click here</a>.
+  </div>
+
+  <script>
+    const fallback = document.getElementById("fallback");
+    const manualLink = document.getElementById("manualLink");
+
+    fetch("https://api.allorigins.win/raw?url=https://raw.githubusercontent.com/abhinyaay/qr-redirect/main/data.json")
+      .then(res => res.json())
+      .then(data => {
+        manualLink.href = data.url;
+        fallback.style.display = "block";
+        setTimeout(() => {
           location.replace(data.url);
-        })
-        .catch(err => {
-          document.body.innerHTML = "<h2>Failed to redirect. Check the JSON or try again later.</h2>";
-        });
-    </script>
-  </head>
-  <body>
-    <p>Redirecting...</p>
-  </body>
+        }, 2000); // 2-second delay
+      })
+      .catch(() => {
+        document.querySelector("h1").textContent = "Failed to redirect.";
+        fallback.innerHTML = "Please try again later.";
+        fallback.style.display = "block";
+      });
+  </script>
+</body>
 </html>
